@@ -2,11 +2,20 @@ from applications import app, db
 from flask import render_template, redirect, url_for, flash
 from applications.forms import UserDataForm
 from applications.models import ShowMovies
+from sqlalchemy import func
 
 @app.route('/')
 def index():
     entries = ShowMovies.query.all()
     return render_template('index.html', entries = entries, title='Movie APP')
+
+
+@app.route('/dashboard')
+def dashboard():
+    rating = db.session.query(ShowMovies.rating, func.count(ShowMovies.rating)).group_by(ShowMovies.rating).all()
+    data = [{'rating': r, 'count': c} for r, c in rating]
+    return render_template('dashboard.html', title='dashboard', data=data)
+
 
 @app.route('/layout')
 def layout():

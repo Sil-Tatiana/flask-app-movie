@@ -1,0 +1,41 @@
+{%extends 'layout.html'%} {%block content%}
+<div class="container">
+  <h2>Movies Rating Chart</h2>
+  <canvas id="ratingChart"> </canvas>
+</div>
+
+<script>
+    const data = {{data|tojson}}
+    const ctx = document.getElementById('ratingChart').getContext('2d');
+    const labels = data.map(item => item.rating);
+      const counts = data.map(item => item.count);
+
+    const chartData = {
+        labels: labels,
+        datasets: [{
+            label: 'Movie Rating',
+            backgroundColor: 'rgb(255, 99, 132)',
+            borderColor: 'rgb(255, 99, 132)',
+            data: counts,
+        }]
+    };
+  //   const chartOptions = {
+      //    scales: {
+      //   r: {
+          //   angleLines: {
+              //   display: false
+          //   },
+          //   suggestedMin: 1,
+          //   suggestedMax: 5
+          // }
+      // }
+  //   };
+
+      const ratingChart = new Chart(ctx, {
+          type: 'line',
+          data: chartData,
+        //   options: chartOptions
+      });
+</script>
+
+{%endblock%}
